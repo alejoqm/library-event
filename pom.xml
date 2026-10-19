@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- Brings in the spring-boot-dependencies BOM: Kafka clients, Spring Kafka,
+       JUnit, Testcontainers, Lombok, AssertJ etc. are all version-managed for us. -->
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>4.1.1</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>com.library.event</groupId>
+  <artifactId>library-event</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>library-event</name>
+  <description>Library event streaming: Kafka publisher and consumer</description>
+
+  <modules>
+    <module>library-event-common</module>
+    <module>library-event-publisher</module>
+    <module>library-event-consumer</module>
+  </modules>
+
+  <properties>
+    <java.version>17</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- Internal modules: children reference these without a version -->
+      <dependency>
+        <groupId>com.library.event</groupId>
+        <artifactId>library-event-common</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.library.event</groupId>
+        <artifactId>library-event-publisher</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.library.event</groupId>
+        <artifactId>library-event-consumer</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <!-- Opt-in per module: only the runnable apps declare this in <build><plugins> -->
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <configuration>
+            <layers>
+              <enabled>true</enabled>
+            </layers>
+          </configuration>
+        </plugin>
+
+        <!-- Java 17 bytecode + Lombok wired as an explicit annotation processor
+             (required style on modern JDKs, avoids "unknown enum constant" noise) -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+            <release>${java.version}</release>
+            <parameters>true</parameters>
+            <annotationProcessorPaths>
+              <path>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+              </path>
+            </annotationProcessorPaths>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <!-- Fail fast if someone builds with the wrong JDK/Maven -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>${maven-enforcer-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>enforce-build-environment</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireJavaVersion>
+                  <version>[17,)</version>
+                  <message>library-event requires JDK 17 or newer.</message>
+                </requireJavaVersion>
+                <requireMavenVersion>
+                  <version>[3.9,)</version>
+                </requireMavenVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
