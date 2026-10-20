@@ -30,20 +30,7 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- JSON processing for serialization (brought in by Spring Boot parent BOM) -->
-        <!-- If you need Jackson directly, it's already managed by spring-boot-starter-parent -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <scope>compile</scope>
-        </dependency>
-
         <!-- Test dependencies -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>

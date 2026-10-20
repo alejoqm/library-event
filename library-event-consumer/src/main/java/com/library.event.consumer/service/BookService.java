@@ -1,7 +1,7 @@
 package com.library.event.consumer.service;
 
-import org.apache.kafka.clients.consumer.ConsumerRecord;
+import com.library.event.common.domain.LibraryEvent;
 
 public interface BookService {
-  void processBook(ConsumerRecord consumerRecord);
+  void processBook(LibraryEvent libraryEvent);
 }

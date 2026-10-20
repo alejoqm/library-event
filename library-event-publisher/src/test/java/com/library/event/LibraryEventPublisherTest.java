@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.library.event.common.domain.Book;
 import com.library.event.common.domain.LibraryEvent;
 import com.library.event.producer.messaging.LibraryEventPublisher;
@@ -21,6 +20,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.UUID;
 

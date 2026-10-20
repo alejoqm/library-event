@@ -1,0 +1,5 @@
+com\library\event\common\domain\Book.class
+com\library\event\common\domain\LibraryEvent$LibraryEventBuilder.class
+com\library\event\common\domain\LibraryEvent.class
+com\library\event\common\domain\LibraryEventType.class
+com\library\event\common\domain\Book$BookBuilder.class

@@ -18,8 +18,8 @@ A Kafka-based event streaming service for library operations (book checkouts, re
 |--------|---------|
 | `library-event-common` | Shared DTOs, enums, domain entities |
 | `library-event-publisher` | REST endpoint, Kafka publisher |
-| `library-event-consumer` | Kafka consumer (WIP) |
-| `local/` | Docker Compose for local Kafka |
+| `library-event-consumer` | Kafka consumer - Persisting with MySql |
+| `local/` | Docker Compose for local Kafka, MySql and Mongo |
 
 ---
 
@@ -167,8 +167,8 @@ Browse topics, view messages, and monitor consumer groups.
 | Maven | 3.9+ (enforced by `maven-enforcer-plugin`) |
 
 Future Work
- Implement consumer module (library-event-consumer)
- Implement Save in database in (library-event-consumer)
+ Implement Junit in differnt components
+ Implement Save in Mongo in (library-event-consumer)
  Add integration tests with embedded Kafka
  Support multiple event types (UPDATE, DELETE)
 

@@ -1,4 +1,5 @@
 services:
+  # Kafka (existing)
   kafka:
     image: apache/kafka:4.2.2
     container_name: library-kafka-broker
@@ -7,34 +8,69 @@ services:
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
-      CLUSTER_ID: 5L6g3nShT-eMCtK--X86sw
-
-      # Listeners: 9092 for clients, 9093 for controller quorum traffic
       KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-
-      # Single-node quorum: this node votes for itself
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
-
-      # Single-broker replication settings
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_NUM_PARTITIONS: 3
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      KAFKA_NUM_PARTITIONS: 3
     networks:
       - kafka-network
     volumes:
       - kafka-data:/var/lib/kafka/data
     healthcheck:
-      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list"]
+      test: ["CMD-SHELL", "bin/kafka-topics.sh --bootstrap-server localhost:9092 --list"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 20s
+
+  # MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: library-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: library_events
+      MYSQL_USER: libraryuser
+      MYSQL_PASSWORD: librarypass
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - kafka-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # MongoDB
+  mongodb:
+    image: mongo:7.0
+    container_name: library-mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: library_events
+      MONGO_INITDB_ROOT_USERNAME: libraryuser
+      MONGO_INITDB_ROOT_PASSWORD: librarypass
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - kafka-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 networks:
   kafka-network:
@@ -42,3 +78,5 @@ networks:
 
 volumes:
   kafka-data:
+  mysql-data:
+  mongo-data:
