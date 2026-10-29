@@ -15,12 +15,6 @@
 	<description>REST endpoint that publishes library events to Kafka</description>
 
 	<dependencies>
-		<!-- Shared DTOs -->
-		<dependency>
-			<groupId>com.library.event</groupId>
-			<artifactId>library-event-common</artifactId>
-		</dependency>
-
 		<!-- Web layer (Spring Boot 4 renamed this) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -34,11 +28,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
-
 		<!-- Test support -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
