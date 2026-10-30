@@ -6,7 +6,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class LibraryEventProducerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(LibraryEventProducerApplication.class, args);
-	}
+  /**
+   * Private constructor to avoid default one.
+   */
+  private LibraryEventProducerApplication() {
+
+  }
+
+  /**
+   * Main class to start Producer.
+   * @param args
+   */
+  public static void main(String[] args) {
+    SpringApplication.run(LibraryEventProducerApplication.class, args);
+  }
 }

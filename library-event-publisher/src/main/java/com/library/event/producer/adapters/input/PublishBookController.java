@@ -12,17 +12,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PublishBookController {
 
-    private final PublishBookUseCase publishBookUseCase;
+  /** Use case for publish book. */
+  private final PublishBookUseCase publishBookUseCase;
 
-    public PublishBookController(final PublishBookUseCase publishBookUseCase) {
-        this.publishBookUseCase = publishBookUseCase;
-    }
+  /**
+   * Inject use case implementation.
+   * @param publishBookUseCase
+   */
+  public PublishBookController(final PublishBookUseCase publishBookUseCase) {
+    this.publishBookUseCase = publishBookUseCase;
+  }
 
-    @PostMapping("/v1/events/book")
-    public ResponseEntity<Void> create(@Valid @RequestBody PublishBookRequest publishBookRequest) {
-        publishBookUseCase.publish(new PublishBookCommand(publishBookRequest.title(),
-                publishBookRequest.author(),
-                publishBookRequest.isbn()));
-        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-    }
+  /**
+   * Rest method to publish an event with book information.
+   * @param publishBookRequest
+   * @return
+   */
+  @PostMapping("/v1/events/book")
+  public ResponseEntity<Void> create(@Valid @RequestBody PublishBookRequest publishBookRequest) {
+    publishBookUseCase.publish(
+        new PublishBookCommand(
+            publishBookRequest.title(), publishBookRequest.author(), publishBookRequest.isbn()));
+    return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+  }
 }

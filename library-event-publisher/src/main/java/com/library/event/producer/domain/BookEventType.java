@@ -1,5 +1,7 @@
 package com.library.event.producer.domain;
 
 public enum BookEventType {
-    BOOK_PUBLISHED
+
+  /** Book was successfully published. */
+  BOOK_PUBLISHED
 }
